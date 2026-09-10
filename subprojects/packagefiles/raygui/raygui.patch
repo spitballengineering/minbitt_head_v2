@@ -1,0 +1,29 @@
+diff --git a/meson.build b/meson.build
+new file mode 100644
+index 0000000..8381585
+--- /dev/null
++++ b/meson.build
+@@ -0,0 +1,23 @@
++project('raygui', 'c',
++        version : '5.0',
++        default_options : ['warning_level=3', 'c_std=c11'],
++)
++
++raylib = dependency('raylib')
++cc = meson.get_compiler('c')
++m_dep = cc.find_library('m', required : false) # reqired by raylib
++
++include_dirs = include_directories('src')
++
++raygui = static_library('raygui', ['src/raygui.h'],
++              dependencies : [m_dep, raylib],
++#              c_args : ['-fpic', '-DRAYGUI_IMPLEMENTATION', '-lraylib', '-lGL', '-lpthread', '-ldl', '-lrt', '-lX11'],
++              install : true)
++
++raygui_dep = declare_dependency(
++#  compile_args: api,
++  include_directories: include_dirs,
++  link_with: raygui,
++)
++
++meson.override_dependency('raygui', raygui_dep)
