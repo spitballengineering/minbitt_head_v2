@@ -41,6 +41,7 @@ hud = executable('minbitt_hud', src,
 
 hud_editor = executable('minbitt_hud_editor', src,
                         dependencies : [m_dep, raylib, raygui],
+                        c_args : '-DEDITOR',
                         install : true) #TODO: test on windows
 
 test('test', hud)

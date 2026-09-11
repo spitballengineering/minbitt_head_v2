@@ -33,8 +33,10 @@ typedef enum {
     MINBITT_FACE,
     DOOM,
     BADAPPLE,
-}cartridge_type;
-typedef void (cartridge_t)(blendshapes* blendshapes, float dt, controller_input *controller_input, const connection_t* connection, Image *frontScreenBuf); //TODO: find better home
+} cartridge_type;
+
+typedef void (cartridge_t)(blendshapes *blendshapes, float dt, controller_input *controller_input,
+                           const connection_t *connection, Image *frontScreenBuf); //TODO: find better home
 
 connection_t parse_args(int argc, char **argv) {
     //TODO:
@@ -63,8 +65,16 @@ int main(int argc, char **argv) {
 
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 1280;//TODO: choose camal case or spline
+#ifdef EDITOR
+    const int screenWidth = 1980; //TODO: choose camal case or spline
+    const int screenHeight = 1080;
+#else
+    const int screenWidth = 1280; //TODO: choose camal case or spline
     const int screenHeight = 720;
+#endif
+    const int insideScreenWidth = 1280; //TODO: choose camal case or spline
+    const int insideScreenHeight = 720;
+
     const int FPS = 60;
     const int frontScreenWidth = 64;
     const int frontScreenHeight = 32;
@@ -82,7 +92,7 @@ int main(int argc, char **argv) {
     bool show_fps = true;
     bool show_bat = true;
     float dt;
-    blendshapes blendshapes;
+    blendshapes blendshapes = {0};
     SetTargetFPS(FPS);
     //--------------------------------------------------------------------------------------
 
@@ -97,7 +107,8 @@ int main(int argc, char **argv) {
 
         // -- load cartaridge --
         //TODO: first unload currenct cartridge
-        switch (loaded_cartridge) { //TODO: maybe use function ptr?
+        switch (loaded_cartridge) {
+            //TODO: maybe use function ptr?
             case MINBITT_FACE:
                 cartridge = minbitt_face_cartridge;
                 break;
@@ -108,10 +119,9 @@ int main(int argc, char **argv) {
                 // badapple(&blendshapes, dt);
                 break;
             default:
-                DrawText("Error: not valid cartridge", screenWidth/2, screenHeight/2, 20, RED);
+                DrawText("Error: not valid cartridge", screenWidth / 2, screenHeight / 2, 20, RED);
                 break;
         }
-
 
 
         //----------------------------------------------------------------------------------
@@ -128,8 +138,9 @@ int main(int argc, char **argv) {
             getCamreaFrame(&cameraBuff);
 
             // -- running catarage --
-             //TODO: maybe seprate update and animat for face cartridge
-            cartridge(&blendshapes, dt, &controller_input, &connection, &frontScreenBuf); //TODO: may need to be a Texture instead of Image
+            //TODO: maybe seprate update and animat for face cartridge
+            cartridge(&blendshapes, dt, &controller_input, &connection, &frontScreenBuf); //TODO: may need an offset for editor mode
+            //TODO: may need to be a Texture instead of Image
             draw_to_front_screen(&frontScreenBuf);
 
             // -- menu --
@@ -137,10 +148,16 @@ int main(int argc, char **argv) {
 
             // -- UI --
             if (show_fps) DrawFPS(10, 10);
-            if (show_bat) DrawRectangle(15, screenHeight-40, 100, 20, PINK);
+            if (show_bat) DrawRectangle(15, screenHeight - 40, 100, 20, PINK);
 
 
             // -- all editor gui --
+#ifdef EDITOR
+            GuiGroupBox((Rectangle){(float) screenWidth - 250, 50, 230, (float) screenHeight - 100},
+                        "Blendshapes");
+            GuiStatusBar((Rectangle){0, (float) screenHeight - 20, (float) screenWidth, 20},
+                         "This is a status bar");
+#endif
         }
         EndDrawing();
         //----------------------------------------------------------------------------------
