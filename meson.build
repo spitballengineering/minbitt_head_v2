@@ -17,12 +17,30 @@ raylib_sub_proj = cmake.subproject('raylib', options : opt_var)
 raylib = raylib_sub_proj.dependency('raylib')
 
 
+#TODO: decided if you want to keep raygui for non GUI Debug
 raygui = dependency('raygui', default_options : ['warning_level=0'])
-cc = meson.get_compiler('c')
+cc = meson.get_compiler('c') # TODO: switch to clang
 m_dep = cc.find_library('m', required : false) # reqired by raylib
 
-hud = executable('minbitt_hud', ['main.c'],
+src = [
+    'src/blendshapes.h',
+    'src/camera.h',
+    'src/connection.c',
+    'src/connection.h',
+    'src/controller.c',
+    'src/controller.h',
+    'src/front_screen.h',
+    'src/main.c',
+    'src/minbitt_face_animation.c',
+    'src/minbitt_face_animation.h']
+
+#TODO: decided if you want to do the headder and 2 implementation .c files for cross compliation or just a bunch of ifdefs
+hud = executable('minbitt_hud', src,
                  dependencies : [m_dep, raylib, raygui],
                  install : true)
+
+hud_editor = executable('minbitt_hud_editor', src,
+                        dependencies : [m_dep, raylib, raygui],
+                        install : true) #TODO: test on windows
 
 test('test', hud)
