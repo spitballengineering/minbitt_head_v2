@@ -11,3 +11,7 @@ meson compile -C builddir
 ```bash
 ./builddir/minbitt_hud
 ```
+> Note you may have to add env variables in linux to use gpu
+```bash
+__GLX_VENDOR_LIBRARY_NAME=nvidia;__NV_PRIME_RENDER_OFFLOAD=1
+```
