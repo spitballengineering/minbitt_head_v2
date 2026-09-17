@@ -1,0 +1,47 @@
+#
+# rgl layout text file (v4.0) - raygui layout file generated using rGuiLayout
+#
+# Number of controls:     31
+#
+# Ref. window:    r <x> <y> <width> <height>
+# Anchor info:    a <id> <name> <posx> <posy> <enabled>
+# Control info:   c <id> <type> <name> <rectangle> <anchor_id> <text>
+#
+r 480 100 1600 900
+a 001 tuneAnchor 30 50 1
+a 002 blendshapesAnchor 1200 40 1
+a 003 loadRecordingAnchor 20 10 1
+a 004 backgroundAnchor 575 10 1
+a 005 screenAnchor 385 50 1
+a 006 loadSaveAnchor 1400 5 1
+c 000 19 StatusBar 0 0 1600 40 0 
+c 001 1 BlendshapeGroupBox -5 10 395 830 2 blendshapes
+c 002 16 BlendEyeROpenSlider 115 125 240 15 2 eye Right open
+c 003 16 BlendEyeLOpenSlider 115 155 240 15 2 eye Left Open
+c 004 16 Slider012 115 185 240 15 2 todo
+c 005 16 Slider013 115 215 240 15 2 todo
+c 006 16 Slider014 115 245 240 15 2 todo
+c 007 16 Slider015 115 275 240 17 2 todo
+c 008 16 Slider016 115 305 240 15 2 todo
+c 009 16 Slider017 115 335 240 15 2 todo
+c 010 16 EyeXSlider 75 0 270 15 1 eye tune x -00.00
+c 011 16 EyeYSlider 75 30 270 16 1 eye tune y -00.00
+c 012 16 MouthSlider 75 60 270 15 1 mouth tune -00.00
+c 013 16 BrowSlider 75 90 270 15 1 brow tune -00.00
+c 014 4 LoadRecordingLabel 0 0 80 20 3 load recording
+c 015 5 SaveButton 100 0 95 30 6 #002#save config
+c 016 11 BackgroundDropdownBox 80 0 185 20 4 ONE;TWO;THREE
+c 017 4 BackgroundLabel 0 0 80 20 4 backgrounds:
+c 018 11 LoadRecordingDropdownBox 80 0 115 20 3 ONE;TWO;THREE
+c 019 7 BezierCheckBoxEx 60 575 24 24 0 toggle bezier curve debug lines
+c 020 21 GifListView 45 615 285 265 0 ONE;TWO;THREE; four; five; six; seven; 8;9;10;etc...
+c 021 4 FrontScreenCordLabel 0 835 50 15 5 (20, 40)
+c 022 5 LoadButton 0 0 95 30 6 #005#load config
+c 023 4 BlendEyeXLabel 60 45 55 15 2 eyeball x
+c 024 4 BlendEyeYLabel 60 75 50 15 2 eyeball y
+c 025 4 BlendEyeXValLabel 295 45 35 20 2 -00.00
+c 026 4 BlendEyeYValLabel 295 75 35 20 2 -00.00
+c 027 23 insideScreen 0 0 800 600 5 inside screen
+c 028 23 frontScreen 0 610 450 220 5 front screen
+c 029 23 controller 465 610 335 220 5 controller
+c 030 23 eyexy 130 25 150 75 2 eyeball xy
