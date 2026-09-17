@@ -7,10 +7,15 @@
 
 //FIXME: needed for exit
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include "raylib.h"
+
 #include "blendshapes.h"
 
 typedef struct {
-    enum { PHONE, MOCK } type;
+    enum conneciton_type { PHONE, MOCK } type;
 
     union {
         struct {
@@ -18,11 +23,15 @@ typedef struct {
             int port;
         } phone;
 
-        char *path;
+        FILE *f;
     };
 } connection_t;
 
-void get_blendshapes(const connection_t connection, blendshapes *blendshapes);
+connection_t init_mock_connection(char*filename);
+connection_t init_phone_connection();
+int deinit_connection(connection_t connection);
+
+int get_blendshapes(const connection_t connection, blendshapes_t *blendshapes);
 
 
 int send_data(const connection_t connection);

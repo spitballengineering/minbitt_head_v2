@@ -6,7 +6,7 @@ void minbitt_face_cartridge_init() {
     //TODO: have this load a confic that was generated from the minbitt editor
 }
 
-void minbitt_face_cartridge(blendshapes* blendshapes, float dt, controller_input *controller_input, const connection_t* connection, Image *frontScreenBuf){
+void minbitt_face_cartridge(blendshapes_t* blendshapes, float dt, controller_input *controller_input, const connection_t* connection, Image *frontScreenBuf){
     // custom gifs
     if (controller_input->l_trigger) {
         unsigned int *key_combo = (unsigned int *) controller_input;
