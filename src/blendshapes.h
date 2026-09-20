@@ -9,7 +9,9 @@
 #include "string.h" //TODO: remove
 #include <stdlib.h>//TODO: remove
 
-typedef struct blendshapes {
+#define NUM_BLENDSHAPES 52
+
+struct ARkit {
     int browDown_L;
     int browDown_R;
     int browInnerUp;
@@ -62,10 +64,32 @@ typedef struct blendshapes {
     int noseSneer_L;
     int noseSneer_R;
     int tongueOut;
-    int trackingStatus; // TODO: seprate from 52 blendshapes?
+};
+
+typedef struct blendshapes {
+    struct ARkit ARkit;
+    int trackingStatus;
+    struct {
+        float x;
+        float y;
+        float z;
+        float ax;
+        float ay;
+        float az;
+    } head;
+    struct {
+        float x;
+        float y;
+        float z;
+    } right_eye;
+    struct {
+        float x;
+        float y;
+        float z;
+    } left_eye;
 } blendshapes_t;
 
-static const char *field_arr[] = {
+static const char *iFacialmocap_field_arr[] = {
     "browDown_L", "browDown_R", "browInnerUp", "browOuterUp_L", "browOuterUp_R", "cheekPuff", "cheekSquint_L",
     "cheekSquint_R", "eyeBlink_L", "eyeBlink_R", "eyeLookDown_L", "eyeLookDown_R", "eyeLookIn_L", "eyeLookIn_R",
     "eyeLookOut_L", "eyeLookOut_R", "eyeLookUp_L", "eyeLookUp_R", "eyeSquint_L", "eyeSquint_R", "eyeWide_L",
@@ -78,9 +102,9 @@ static const char *field_arr[] = {
 
 static inline void blendshapes_set_field(blendshapes_t *blendshapes, char *field, int val) {
     //TODO: optimize
-    for (int i = 0; i < 53; ++i) {
-        if (strcmp(field, field_arr[i]) == 0) {
-            *((int *) blendshapes + i) = val; // kek
+    for (int i = 0; i < NUM_BLENDSHAPES + 1; ++i) {
+        if (strcmp(field, iFacialmocap_field_arr[i]) == 0) {
+            *((int *) &blendshapes->ARkit + i) = val; // kek
             return;
         }
     }
