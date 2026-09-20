@@ -67,8 +67,13 @@ struct ARkit {
 };
 
 typedef struct blendshapes {
-    struct ARkit ARkit;
-    int trackingStatus;
+    union {
+        struct {
+            struct ARkit ARkit;
+            int trackingStatus;
+        };
+        int ARkit_arr[NUM_BLENDSHAPES+1]; // kek
+    };
     struct {
         float x;
         float y;
@@ -104,7 +109,7 @@ static inline void blendshapes_set_field(blendshapes_t *blendshapes, char *field
     //TODO: optimize
     for (int i = 0; i < NUM_BLENDSHAPES + 1; ++i) {
         if (strcmp(field, iFacialmocap_field_arr[i]) == 0) {
-            *((int *) &blendshapes->ARkit + i) = val; // kek
+            blendshapes->ARkit_arr[i] = val; // kek
             return;
         }
     }

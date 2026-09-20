@@ -51,7 +51,7 @@ sed -i '/static void .*\(\)/,/\}/d' $OUTPUT_FILE
 sed -n 's/state.layoutRecs\[\(.*\)] = (Rectangle).*: \(.*\)/\1 \2/p' $OUTPUT_FILE | \
 while read -r num var; do
   # creates new sed string to find and replace all layoutRecs[..] with paired variable name
-  str=s/layoutRecs\\[$num\\]/${var}Rec/
+  str=s/layoutRecs\\[$num\\]/${var}Rec/g
   sed -i "${str}" $OUTPUT_FILE
 done
 

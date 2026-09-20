@@ -11,6 +11,7 @@
 #ifdef EDITOR
 #define GUI_MINBITT_EDITOR_IMPLEMENTATION
 #include "gui_minbitt_editor.h"
+#include "gui_editor_sidebars.h"
 #endif
 
 #include "defaults.h"
@@ -81,8 +82,15 @@ int main(int argc, char **argv) {
 #ifdef EDITOR
     InitWindow(EDITOR_WIDTH, EDITOR_HEIGHT, "minbox");
     SetWindowMonitor(3); // DEBUG
+    GuiEnableTooltip();
 
     GuiMinbittEditorState gui = InitGuiMinbittEditor();
+    GuiTuneProps tuneProps = GuiMinbittEditorTuneProp();
+    GuiBlendshapesProps blendshapesProps =  GuiMinbittEditorBlendshapesProp();
+
+    // Tweak the default raygui style a bit
+    GuiSetStyle(LISTVIEW, LIST_ITEMS_HEIGHT, 24);
+    GuiSetStyle(LISTVIEW, SCROLLBAR_WIDTH, 12);
 #else
     InitWindow(INSIDE_SCREEN_WIDTH, INSIDE_SCREEN_HEIGHT, "minbox");
     ToggleFullscreen();
@@ -144,10 +152,12 @@ int main(int argc, char **argv) {
         //----------------------------------------------------------------------------------
         BeginDrawing();
         {
-            ClearBackground(RAYWHITE);
 #ifdef EDITOR
+            ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
             rlPushMatrix();
             rlTranslatef(gui.insideScreenRec.x, gui.insideScreenRec.y, 0);
+#else
+            ClearBackground(RAYWHITE);
 #endif
             DrawText("MinboX console/OS?", 190, 200, 20, LIGHTGRAY);
 
@@ -172,14 +182,16 @@ int main(int argc, char **argv) {
 
 #ifdef EDITOR
             rlPopMatrix(); // undoes shift
-            // -- editor gui --
-            // Note this is before GuiMinbittEditor cuz that will set state.BlendEye... if user moves slider
-            gui.BlendEyeLOpenSliderValue = (float)blendshapes.ARkit.eyeBlink_L;
-
+            // Note: this is before GuiDMPropertyList becaue user might manualy move slider
+            // setting it after GuiDMPropertyList would override that value
+            for (int i = 0; i < NUM_BLENDSHAPES; ++i)
+                blendshapesProps.arr[i].value.vslider.val = (float)blendshapes.ARkit_arr[i];
+            //TODO: replace with raylib rtext.h when porting to windows?
+            snprintf(BlendEyeXValLabelText, sizeof(BlendEyeYValLabelText),"%5.2f", blendshapes.left_eye.x);
+            snprintf(BlendEyeYValLabelText, sizeof(BlendEyeYValLabelText),"%5.2f", blendshapes.left_eye.y);
             GuiMinbittEditor(&gui);
-
-            // GuiSetStyle(DROPDOWNBOX, TEXT_PADDING, 4);
-            // GuiSetStyle(DROPDOWNBOX, TEXT_ALIGNMENT, TEXT_ALIGN_LEFT);
+            GuiDMPropertyList(gui.settingsRec, tuneProps.arr, sizeof(tuneProps.props)/sizeof(tuneProps.arr[0]), &tuneProps.focus, &tuneProps.scroll);
+            GuiDMPropertyList(gui.blendshapesRec, blendshapesProps.arr, sizeof(blendshapesProps.props)/sizeof(blendshapesProps.arr[0]), &blendshapesProps.focus, &blendshapesProps.scroll);
 
             // front display preview
             UpdateTexture(frontScreenTexture, frontScreenBuf.data); // we can do this cuz of the assert at the top
@@ -201,10 +213,10 @@ int main(int argc, char **argv) {
             DrawCircleV(eyeVec, 7, PINK);
             DrawCircleV(eyeVec, 5, RED);
 
-            // Vector2 pos = GetMousePosition();
-            // char buff[256];
-            // snprintf(buff, 256,"%3.0f, %3.0f", pos.x, pos.y);
-            // DrawText(buff, 10, EDITOR_HEIGHT-80, 80, RED);
+            Vector2 mousePoint = GUI_POINTER_POSITION;
+            GuiTooltip((Rectangle){mousePoint.x, mousePoint.y,
+                (float)GuiGetTextWidth(guiTooltipPtr), (float)GuiGetStyle(DEFAULT,TEXT_SIZE)});
+            GuiSetTooltip(NULL);
 
 #endif
         }

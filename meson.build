@@ -34,7 +34,9 @@ src = [
     'src/main.c',
     'src/minbitt_face_animation.c',
     'src/minbitt_face_animation.h',
-    'src/gui_minbitt_editor.h'
+    'src/external/dm_property_list.h',
+    'src/gui_minbitt_editor.h',
+    'src/gui_editor_sidebars.h',
 ]
 
 #TODO: decided if you want to do the headder and 2 implementation .c files for cross compliation or just a bunch of ifdefs
